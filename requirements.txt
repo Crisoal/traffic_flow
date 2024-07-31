@@ -1,0 +1,8 @@
+Flask
+tensorflow
+pandas
+numpy
+joblib
+pytz
+requests
+holidays
