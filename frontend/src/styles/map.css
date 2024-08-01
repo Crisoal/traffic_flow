@@ -1,3 +1,8 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
 General styles for glassy effect
 .glassy {
   background: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
@@ -19,28 +24,26 @@ General styles for glassy effect
 /* Full-width container for geocoder and directions icon */
 .full-width-container {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  width: 18%; /* Full viewport width */
   position: fixed;
   top: 10px;
   left: 10px;
+  width: auto; /* Adjust width to fit content */
   z-index: 1;
 }
 
-/* Style for the geocoder container */
 .geocoder-container {
   position: relative;
-  z-index: 1;
+  flex: 1; /* Allows the search box to take up remaining space */
 }
 
-/* Style for the directions icon */
 .directions-icon {
   font-size: 24px;
-  color: white;
+  color: #262525cc;
   cursor: pointer;
-  z-index: 1;
+  margin-left: 25%; /* Space between search box and icon */
 }
+
 
 /* Styles for the sidebar */
 .sidebar {
@@ -116,6 +119,7 @@ General styles for glassy effect
   width: auto;
   padding: 10px;
   border-radius: 10px;
+  z-index: 1;
 }
 
 .forecast-controls button{
@@ -201,3 +205,6 @@ General styles for glassy effect
   z-index: 1;
   visibility: hidden;
 }
+
+
+

@@ -5,11 +5,13 @@ import { FaDirections } from 'react-icons/fa';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import './styles/map.css'; // Make sure this path is correct
+import { Button } from 'reactstrap'; // Import Button from reactstrap
 
 const Map = () => {
   const [directionsVisible, setDirectionsVisible] = useState(false);
   const [startLocation, setStartLocation] = useState('');
   const [searchedLocation, setSearchedLocation] = useState(null);
+  const [forecastTime, setForecastTime] = useState('current'); // State for forecast time
   const mapContainerRef = useRef(null);
   const directionsControlRef = useRef(null);
   const mapRef = useRef(null);
@@ -18,6 +20,12 @@ const Map = () => {
   const toggleDirections = useCallback(() => {
     setDirectionsVisible(prevState => !prevState);
   }, []);
+
+  const fetchTrafficData = async (map, time, location) => {
+    // Fetch traffic data based on the forecast time and location
+    console.log(`Fetching traffic data for ${time} forecast`);
+    // Add your traffic data fetching logic here
+  };
 
   useEffect(() => {
     if (window.mapboxgl && window.MapboxDirections) {
@@ -143,6 +151,22 @@ const Map = () => {
           </div>
         )}
         <FaDirections className="directions-icon" onClick={toggleDirections} aria-label="Toggle Directions" />
+      </div>
+      <div className="forecast-controls">
+        {['current', '15min', '30min', '45min', '1hr', '2hr', '3hr'].map((time, index) => (
+          <Button
+            key={index}
+            color={forecastTime === time ? 'primary' : 'secondary'}
+            onClick={() => {
+              setForecastTime(time);
+              if (searchedLocation) {
+                fetchTrafficData(mapRef.current, time, searchedLocation);
+              }
+            }}
+          >
+            {time}
+          </Button>
+        ))}
       </div>
       <div id="map" ref={mapContainerRef} style={{ width: '100%', height: '100vh' }}></div>
     </div>
