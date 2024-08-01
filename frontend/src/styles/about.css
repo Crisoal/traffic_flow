@@ -192,6 +192,13 @@
   width: 100%;
 }
 
-.accordion-header button{
-   color: darkgreen;
+#faq-accordion .accordion-button{
+   color: darkgreen !important;
+   padding-left: 3%;
+}
+
+#faq-accordion .icon-small {
+  color: darkolivegreen;
+  font-size: 1.5rem; 
+  padding-bottom: 7px;
 }
