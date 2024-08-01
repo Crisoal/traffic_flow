@@ -14,7 +14,7 @@ const portfolioItems = [
         detailsLink: "portfolio-details.html",
     },
     {
-        src: `${process.env.PUBLIC_URL}/images/areas/yaba.jpeg`,
+        src: `${process.env.PUBLIC_URL}/images/areas/SOTA-KINGSWAY-TOWER-LAGOS-NIGERIA.jpg`,
         title: "Yaba",
         description: "Plan Your Route Effectively",
         filter: "branding",

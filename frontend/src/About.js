@@ -8,7 +8,7 @@ const About = () => {
         <div className="container">
           <div className="row align-items-center justify-content-end">
             <div className="col-md-6 order-md-1">
-              <h2 className="heading mb-3" id='content-white'>About US</h2>
+              <h2 className="heading mb-3" id='content-white'>About <br /> LagosFlow</h2>
               <div className="sub-heading">
                 {/* <p className="mb-5">A free template by ProBootstrap.com for Law Firm</p> */}
               </div>
@@ -24,13 +24,13 @@ const About = () => {
             <div className="col-lg-5 pr-md-5 pr-sm-0">
               <h2 className="mt-0 heading-border-top mb-3 font-weight-normal">Who We Are</h2>
               <div>
-      <p className="gray-text">
-        Navigating the bustling streets of Lagos has never been easier with LagosFlow. Our platform is dedicated to providing you with real-time traffic updates and alternative route suggestions to ensure a smooth and efficient journey. Whether you're commuting to work, running errands, or exploring the city, LagosFlow helps you avoid traffic jams and save valuable time.
-      </p>
-      <p className="gray-text">
-        At LagosFlow, we are committed to enhancing your travel experience in Lagos. Join us as we strive to make every journey faster and stress-free.
-      </p>
-    </div>
+                <p className="gray-text">
+                  Navigating the bustling streets of Lagos has never been easier with LagosFlow. Our platform is dedicated to providing you with real-time traffic updates and alternative route suggestions to ensure a smooth and efficient journey. Whether you're commuting to work, running errands, or exploring the city, LagosFlow helps you avoid traffic jams and save valuable time.
+                </p>
+                <p className="gray-text">
+                  At LagosFlow, we are committed to enhancing your travel experience in Lagos. Join us as we strive to make every journey faster and stress-free.
+                </p>
+              </div>
             </div>
             <div className="col-lg-7">
               <div className="images">
@@ -93,35 +93,6 @@ const About = () => {
                 <img className="img2" src={`${process.env.PUBLIC_URL}/images/areas/victoria_island.jpg`} alt="free Template by ProBootstrap.com" />
               </div>
             </div>
-            {/* <div className="col-lg-5 pl-md-5 pl-sm-0">
-              <div id="exampleAccordion" className="pb_accordion" data-children=".item">
-                <div className="item">
-                  <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion1" aria-expanded="true" aria-controls="exampleAccordion1" className="pb_font-18">Property &amp; Business Law</a>
-                  <div id="exampleAccordion1" className="collapse show" role="tabpanel">
-                    <p>Pityful a rethoric question ran over her cheek, then she continued her way.</p>
-                    <p>Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                  </div>
-                </div>
-                <div className="item">
-                  <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion2" aria-expanded="false" aria-controls="exampleAccordion2" className="pb_font-18">Family Law</a>
-                  <div id="exampleAccordion2" className="collapse" role="tabpanel">
-                    <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-                  </div>
-                </div>
-                <div className="item">
-                  <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion3" aria-expanded="false" aria-controls="exampleAccordion3" className="pb_font-18">Commercial Litigation</a>
-                  <div id="exampleAccordion3" className="collapse" role="tabpanel">
-                    <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-                  </div>
-                </div>
-                <div className="item">
-                  <a data-toggle="collapse" data-parent="#exampleAccordion" href="#exampleAccordion4" aria-expanded="false" aria-controls="exampleAccordion4" className="pb_font-18">Injury Compensation</a>
-                  <div id="exampleAccordion4" className="collapse" role="tabpanel">
-                    <p>The Big Oxmox advised her not to do so, because there were thousands of bad Commas, wild Question Marks and devious Semikoli, but the Little Blind Text didn’t listen. She packed her seven versalia, put her initial into the belt and made herself on the way.</p>
-                  </div>
-                </div>
-              </div>
-            </div> */}
           </div>
         </div>
       </section>
@@ -132,32 +103,13 @@ const About = () => {
           <div className="row justify-content-md-center text-center mb-5">
             <div className="col-lg-7">
               <h2 className="mt-0 heading-border-top font-weight-normal">Author</h2>
+              <img src={`${process.env.PUBLIC_URL}/images/Crisoal - Copy.jpeg`} alt="Author" className="author-image" />
               <p>Christiana Ola is the visionary behind LagosFlow. As a final year computing student, Christiana is passionate about technology and its potential to solve real-world problems. With a keen interest in machine learning and cybersecurity, she has developed LagosFlow to help commuters navigate the complex traffic patterns of Lagos efficiently. Christiana's dedication to innovation and her expertise as a developer ensure that LagosFlow remains a reliable and advanced tool for all users.</p>
             </div>
           </div>
-
-          {/* <div className="row">
-            <div className="col-md-12">
-              <div className="single-item pb_slide_v2">
-                <div>
-                  <div className="d-lg-flex d-md-block slide_content">
-                    <div className="pb_content-media" style={{ backgroundImage: `url(${process.env.PUBLIC_URL}/images/Crisoal - Copy.jpeg)` }}></div>
-                    <div className="slide_content-text text-center">
-                      <div className="pb_icon_v1"><i className="flaticon text-primary flaticon-handcuffs"></i></div>
-                      <h3 className="font-weight-normal mt-0 mb-4">Criminal Law</h3>
-                      <p >Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean.</p>
-                      <p>A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth.</p>
-                      <p>Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</p>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </div> */}
-        </div>  
+        </div>
       </section>
-      
+      {/* END section */}
     </div>
   );
 }

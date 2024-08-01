@@ -8,7 +8,7 @@ const Contact = () => {
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-12">
-              <h2 className="heading mb-3">Contact US</h2>
+              <h2 className="heading mb-3" id="contact"> Contact US</h2>
               <p className="sub-heading mb-2 pb_color-light-opacity-8">We’d love to hear from you! For any questions or feedback, please reach out to us</p>
 
             </div>
@@ -60,14 +60,14 @@ const Contact = () => {
 
       <section className="pb_section" data-section="contact" id="section-contact">
         <div className="container">
-          <div className="row justify-content-md-center text-center">
+          <div className="row justify-content-md-center text-center pb-0">
             <div className="col-lg-7">
               <h2 className="mt-0 heading-border-top font-weight-normal">Get In Touch</h2>
               <p>Our team is here to assist you and ensure you have the best experience using LagosFlow.</p>
             </div>
           </div>
 
-          <div className="row mt-0" id="row-contact">
+          <div className="row mt-0 pt-0" id="row-contact">
             <div className="col-md-12 pr-md-5 pr-sm-0 mb-3 mt-0">
               <form action="#">
                 <div className="row mt-0">
@@ -85,7 +85,7 @@ const Contact = () => {
                   </div>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group p-3 pt-0 pb-0">
                   <label htmlFor="message">Message</label>
                   <textarea cols="30" rows="10" className="form-control p-3 rounded-0" id="message"></textarea>
                 </div>

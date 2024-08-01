@@ -44,7 +44,7 @@ h6 {
 .row {
     max-width: 1245px;
     margin: 0 auto;
-    padding: 75px 0;
+    padding: 50px 0;
     position: relative;
 }
 
@@ -188,9 +188,11 @@ h6 {
     font-family: 'Open Sans', sans-serif, Arial, Helvetica;
     font-size: 16px;
     font-weight: 300;
-    color: #414141;
     font-style: italic;
+    color: #202020;
 }
+
+
 
 
 /* PORTFOLIO--------------------------------------*/
@@ -263,6 +265,7 @@ h6 {
 .portfolio .portfolio-item {
     position: relative;
     overflow: hidden;
+    height: fit-content;
 }
 
 .portfolio .portfolio-item .portfolio-info {

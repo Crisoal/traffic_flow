@@ -4,7 +4,7 @@ import { FaFacebookSquare, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const Footer = () => {
   return (
-    <footer style={{ marginTop: '100px' }}>
+    <footer>
       <div className="footer-main py-5">
         <div className="container">
           <div className="row">
@@ -95,7 +95,7 @@ const Footer = () => {
           background-color: #000000f7;
           }
           
-          footer .footer-main h4, p {
+          footer .footer-main h4, footer .footer-main p{
             color: #ccc;
           }
         `}

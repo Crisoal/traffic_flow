@@ -48,11 +48,12 @@
     content: '';
     position: absolute;
     top: 0;
-    left: 0;
+    left: 50%; /* Start from the center */
+    transform: translateX(-50%); /* Center it by shifting it left by 50% of its width */
     width: 50px;
     height: 4px;
-    background: #ff6b6b;
-  }
+    background: darkolivegreen;
+}
   
   .pb_cover .heading, .pb_cover_v1 .heading, .pb_cover_v2 .heading, .pb_cover_v3 .heading, .pb_cover_v4 .heading {
     font-size: 62px;
@@ -161,7 +162,9 @@
 }
 #row-contact .btn{
   background-color: darkolivegreen;
-  margin-top: 10px;
+  margin-top: 15px;
+  color: white;
+  margin-left: 2.2%;
 
 }
 .moon{
@@ -169,4 +172,26 @@
   color: white;
   height: 50vh;
   padding: 100px;
+}
+
+.author-image {
+  display: block;
+  margin: 0 auto 20px; /* Center the image and add margin below */
+  width: 170px; /* Adjust the size as needed */
+  height: 170px; /* Adjust the size as needed */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensure the image covers the entire area */
+}
+
+#contact {
+  color: white;
+}
+
+#faq-accordion .col-11, 
+#faq-accordion .col-12 {
+  width: 100%;
+}
+
+.accordion-header button{
+   color: darkgreen;
 }

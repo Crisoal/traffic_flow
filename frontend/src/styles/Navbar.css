@@ -1,13 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
 /* Custom styles for the navbar */
-
 .navbar {
   padding: 25px 100px 25px 125.8px;
   background-color: #000000f7;
@@ -20,9 +19,9 @@
   left: 0;
 }
 
-.nav-link {
+.nav-item a  {
   text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   padding: 0 10px;
   color: #ccc;
@@ -32,15 +31,15 @@
   font-variation-settings: "wdth" 100;
 }
 
-.nav-link:hover {
+.nav-item a:hover {
   text-decoration: underline;
   background-color: darkolivegreen;
   color: #ccc;
 }
 
 /* Active nav link style */
-.nav-link.active {
-  color: #ccc !important; /* Change the text color for the active link */
-  background-color: darkolivegreen; /* Change the background color for the active link */
+.nav-item a.active {
+  color: #ccc; /* Text color for the active link */
+  background-color: darkolivegreen; /* Background color for the active link */
   font-weight: 600; /* Optional: make the font bold for the active link */
 }
