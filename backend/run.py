@@ -3,19 +3,18 @@
 import sys
 import os
 from flask import Flask
-from flask_cors import CORS  # Import CORS
+from flask_cors import CORS
 
-# Set the PYTHONPATH to the parent directory of 'backend'
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from flask import Flask
 from backend.routes.predict import predict_bp
+from backend.routes.newsletter import newsletter_bp
 
 app = Flask(__name__)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000"}})
 
-# Register the blueprint for the prediction routes
 app.register_blueprint(predict_bp, url_prefix='/api')
+app.register_blueprint(newsletter_bp, url_prefix='/api')
 
 @app.route('/')
 def home():
@@ -23,4 +22,3 @@ def home():
 
 if __name__ == '__main__':
     app.run(debug=True)
-

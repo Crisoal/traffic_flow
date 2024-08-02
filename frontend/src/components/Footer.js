@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaFacebookSquare, FaTwitter, FaInstagram } from 'react-icons/fa';
+import axios from 'axios'; // Import axios for making HTTP requests
 
 const Footer = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await axios.post('http://localhost:5000/api/subscribe', { email });
+      setMessage(response.data.message);
+      setEmail('');
+    } catch (error) {
+      setMessage(error.response.data.error || 'Something went wrong');
+    }
+  };
+
   return (
     <footer>
       <div className="footer-main py-5">
@@ -38,7 +54,6 @@ const Footer = () => {
                 100251, Nigeria<br />
               </p>
               <p>
-                {/* <a href="mailto:[email&#160;protected]">[email&#160;protected]</a><br /> */}
                 Phone: (+234) 678 97823<br />
                 Fax: (+234) 789 034590
               </p>
@@ -51,7 +66,6 @@ const Footer = () => {
                 <li><a href="/map" target='blank'>Map</a></li>
                 <li><a href="/about" target='blank'>About</a></li>
                 <li><a href="/contact" target='blank'>Contact</a></li>
-                {/* <li><a href="/faq" target='blank'>FAQ</a></li> */}
               </ul>
             </div>
 
@@ -59,13 +73,15 @@ const Footer = () => {
               <h4>Our Newsletter</h4>
               <p>Join our newsletter for the latest insights and alerts.</p>
               <div className="subscribe-form">
-                <form id="mc-form" className="group" novalidate="true">
+                <form id="mc-form" className="group" onSubmit={handleSubscribe} noValidate>
                   <input
                     type="email"
                     name="EMAIL"
                     className="form-control mb-2"
                     id="mc-email"
                     placeholder="Email Address"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                   <input
@@ -74,7 +90,7 @@ const Footer = () => {
                     value="Send"
                     className="btn btn-primary footer-btn"
                   />
-                  <label htmlFor="mc-email" className="subscribe-message"></label>
+                  <label htmlFor="mc-email" className="subscribe-message">{message}</label>
                 </form>
               </div>
             </div>
@@ -92,7 +108,7 @@ const Footer = () => {
           }
           
           .footer-main{
-          background-color: #000000f7;
+            background-color: #000000f7;
           }
           
           footer .footer-main h4, footer .footer-main p{
@@ -100,8 +116,6 @@ const Footer = () => {
           }
         `}
       </style>
-
-
     </footer>
   );
 };
