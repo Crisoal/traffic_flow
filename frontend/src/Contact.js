@@ -1,16 +1,76 @@
-import React from 'react';
-import './styles/about.css'; // Make sure to include any necessary CSS
+import React, { useState } from 'react';
+import './styles/about.css';
 
 const Contact = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
+  const [responseMessage, setResponseMessage] = useState('');
+  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+
+  // Validate email format
+  const validateEmail = (email) => {
+    const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return re.test(email);
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setResponseMessage('');
+    setMessageType('');
+
+    // Client-side validation
+    if (!name || !email || !message) {
+      setResponseMessage('All fields are required.');
+      setMessageType('error');
+      return;
+    }
+    if (!validateEmail(email)) {
+      setResponseMessage('Please enter a valid email address.');
+      setMessageType('error');
+      return;
+    }
+
+    // Sanitize inputs (basic example, should be improved for more security)
+    const sanitizedName = name.trim();
+    const sanitizedEmail = email.trim();
+    const sanitizedMessage = message.trim();
+
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name: sanitizedName, email: sanitizedEmail, message: sanitizedMessage }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setResponseMessage('Message sent successfully. We will get back to you within 2 business days.');
+        setMessageType('success');
+        setName('');
+        setEmail('');
+        setMessage('');
+      } else {
+        setResponseMessage(data.error || 'An error occurred while sending your message.');
+        setMessageType('error');
+      }
+    } catch (error) {
+      setResponseMessage('An unexpected error occurred.');
+      setMessageType('error');
+    }
+  };
+
   return (
     <div>
       <section className="pb_sm_py_cover text-center cover-bg-black cover-bg-opacity-4 moon" style={{ backgroundImage: 'url(assets/images/1900x1200_img_3.jpg)' }}>
         <div className="container">
           <div className="row align-items-center">
             <div className="col-md-12">
-              <h2 className="heading mb-3" id="contact"> Contact US</h2>
+              <h2 className="heading mb-3" id="contact">Contact US</h2>
               <p className="sub-heading mb-2 pb_color-light-opacity-8">We’d love to hear from you! For any questions or feedback, please reach out to us</p>
-
             </div>
           </div>
         </div>
@@ -26,8 +86,8 @@ const Contact = () => {
                 </div>
                 <div className="media-body">
                   <h3 className="mt-0 pb_font-20">Address:</h3>
-                  <p>LagosFlow Headquarters
-                    123 Main Street, Victoria Island
+                  <p>LagosFlow Headquarters<br />
+                    123 Main Street, Victoria Island<br />
                     Lagos, Nigeria</p>
                 </div>
               </div>
@@ -69,57 +129,87 @@ const Contact = () => {
 
           <div className="row mt-0 pt-0" id="row-contact">
             <div className="col-md-12 pr-md-5 pr-sm-0 mb-3 mt-0">
-              <form action="#">
+              <form onSubmit={handleSubmit}>
                 <div className="row mt-0">
                   <div className="col-md">
                     <div className="form-group">
                       <label htmlFor="name">Name</label>
-                      <input type="text" className="form-control p-3 rounded-0" id="name" />
+                      <input 
+                        type="text" 
+                        className="form-control p-3 rounded-0" 
+                        id="name" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        required 
+                      />
                     </div>
                   </div>
                   <div className="col-md">
                     <div className="form-group">
                       <label htmlFor="email">Email</label>
-                      <input type="text" className="form-control p-3 rounded-0" id="email" />
+                      <input 
+                        type="email" 
+                        className="form-control p-3 rounded-0" 
+                        id="email" 
+                        value={email} 
+                        onChange={(e) => setEmail(e.target.value)} 
+                        required 
+                      />
                     </div>
                   </div>
                 </div>
 
                 <div className="form-group p-3 pt-0 pb-0">
                   <label htmlFor="message">Message</label>
-                  <textarea cols="30" rows="10" className="form-control p-3 rounded-0" id="message"></textarea>
+                  <textarea 
+                    cols="30" 
+                    rows="10" 
+                    className="form-control p-3 rounded-0" 
+                    id="message" 
+                    value={message} 
+                    onChange={(e) => setMessage(e.target.value)} 
+                    required 
+                  ></textarea>
                 </div>
                 <div className="form-group">
-                  <input type="submit" className="btn pb_outline-dark pb_font-13 pb_letter-spacing-2 p-3 rounded-0" value="Send Message" />
+                  <input 
+                    type="submit" 
+                    className="btn pb_outline-dark pb_font-13 pb_letter-spacing-2 p-3 rounded-0" 
+                    value="Send Message" 
+                  />
                 </div>
+                {responseMessage && (
+                  <div className={`response-message ${messageType}`}>
+                    {responseMessage}
+                  </div>
+                )}
               </form>
             </div>
-            {/* <div className="col-md-4">
-              <ul className="pb_contact_details_v1">
-                <li>
-                  <span className="text-uppercase">Email</span>
-                  <a href="/cdn-cgi/l/email-protection" className="__cf_email__" data-cfemail="8dfdffe2efe2e2f9fef9ffecfdcdeae0ece4e1a3eee2e0">[email&#160;protected]</a>
-                </li>
-                <li>
-                  <span className="text-uppercase">Phone</span>
-                  +30 976 1382 9921
-                </li>
-                <li>
-                  <span className="text-uppercase">Fax</span>
-                  +30 976 1382 9922
-                </li>
-                <li>
-                  <span className="text-uppercase">Address</span>
-                  San Francisco, CA <br />
-                  4th Floor8 Lower <br />
-                  San Francisco street, M1 50F
-                </li>
-              </ul>
-            </div> */}
           </div>
         </div>
       </section>
       {/* END section */}
+      <style>
+        {`
+          .response-message.success {
+            color: green;
+          }
+          .response-message.error {
+            color: red;
+          }
+          .form-group input, .form-group textarea {
+            border-radius: 0;
+          }
+          .btn {
+            background-color: darkolivegreen;
+            border: none;
+            color: white;
+          }
+          .btn:hover {
+            background-color: olive;
+          }
+        `}
+      </style>
     </div>
   );
 };
