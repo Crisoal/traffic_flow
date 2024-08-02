@@ -22,7 +22,7 @@ const About = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-5 pr-md-5 pr-sm-0">
-              <h2 className="mt-0 heading-border-bottom mb-3 font-weight-normal">Who We Are</h2>
+              <h2 className="mt-0 header-border-bottom mb-3 font-weight-normal">Who We Are</h2>
               <div>
                 <p className="gray-text">
                   Navigating the bustling streets of Lagos has never been easier with LagosFlow. Our platform is dedicated to providing you with real-time traffic updates and alternative route suggestions to ensure a smooth and efficient journey. Whether you're commuting to work, running errands, or exploring the city, LagosFlow helps you avoid traffic jams and save valuable time.
