@@ -158,6 +158,8 @@ const MainContent = () => {
                     </div>
                 </section>
 
+                
+
                 {/* Portfolio Section */}
                 <section id="portfolio" className="portfolio section">
                     <div className="isotope-layout" data-default-filter="*" data-layout="masonry" data-sort="original-order">

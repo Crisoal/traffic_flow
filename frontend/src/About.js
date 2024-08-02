@@ -22,7 +22,7 @@ const About = () => {
         <div className="container">
           <div className="row">
             <div className="col-lg-5 pr-md-5 pr-sm-0">
-              <h2 className="mt-0 heading-border-top mb-3 font-weight-normal">Who We Are</h2>
+              <h2 className="mt-0 heading-border-bottom mb-3 font-weight-normal">Who We Are</h2>
               <div>
                 <p className="gray-text">
                   Navigating the bustling streets of Lagos has never been easier with LagosFlow. Our platform is dedicated to providing you with real-time traffic updates and alternative route suggestions to ensure a smooth and efficient journey. Whether you're commuting to work, running errands, or exploring the city, LagosFlow helps you avoid traffic jams and save valuable time.
@@ -82,7 +82,7 @@ const About = () => {
         <div className="container">
           <div className="row justify-content-md-center text-center mb-5">
             <div className="col-lg-7">
-              <h2 className="mt-0 heading-border-top font-weight-normal">Why Us</h2>
+              <h2 className="mt-0 heading-border-bottom font-weight-normal">Why Us</h2>
               <p>We provide real-time traffic updates, accurate congestion predictions, and interactive maps tailored to the city's unique traffic challenges. Our platform uses advanced machine learning and live data to help you avoid delays and find the best routes. Trust LagosFlow for a smoother, more predictable travel experience in Lagos.</p>
             </div>
           </div>
@@ -102,7 +102,7 @@ const About = () => {
         <div className="container">
           <div className="row justify-content-md-center text-center mb-5">
             <div className="col-lg-7">
-              <h2 className="mt-0 heading-border-top font-weight-normal">Author</h2>
+              <h2 className="mt-0 heading-border-bottom font-weight-normal">Author</h2>
               <img src={`${process.env.PUBLIC_URL}/images/Crisoal - Copy.jpeg`} alt="Author" className="author-image" />
               <p>Christiana Ola is the visionary behind LagosFlow. As a final year computing student, Christiana is passionate about technology and its potential to solve real-world problems. With a keen interest in machine learning and cybersecurity, she has developed LagosFlow to help commuters navigate the complex traffic patterns of Lagos efficiently. Christiana's dedication to innovation and her expertise as a developer ensure that LagosFlow remains a reliable and advanced tool for all users.</p>
             </div>

@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaDirections } from 'react-icons/fa';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './styles/map.css'; // Make sure this path is correct
+import './styles/map.css'; 
 import { Button } from 'reactstrap'; // Import Button from reactstrap
 
 const Map = () => {

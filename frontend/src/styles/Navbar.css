@@ -43,3 +43,8 @@
   background-color: darkolivegreen; /* Background color for the active link */
   font-weight: 600; /* Optional: make the font bold for the active link */
 }
+
+.navbar-toggler .navbar-toggler-icon {
+  filter: invert(1);
+}
+

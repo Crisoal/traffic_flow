@@ -30,30 +30,27 @@
     font-size: 1.25rem;
   }
   
-  .pb_section {
-    padding: 7rem 0;
-  }
-  
   .pb_section_v1 {
     background: #f8f9fa;
   }
   
-   .heading-border-top {
+  .heading-border-bottom {
     position: relative;
-    padding-top: 1rem;
-    margin-top: 2rem;
-  }
-  
-  .heading-border-top:before {
+    padding-bottom: 1rem; /* Adjust padding as needed */
+    margin-bottom: 2rem; /* Adjust margin as needed */
+}
+
+.heading-border-bottom:after {
     content: '';
     position: absolute;
-    top: 0;
+    bottom: 0; /* Position at the bottom */
     left: 50%; /* Start from the center */
     transform: translateX(-50%); /* Center it by shifting it left by 50% of its width */
     width: 50px;
     height: 4px;
     background: darkolivegreen;
 }
+
   
   .pb_cover .heading, .pb_cover_v1 .heading, .pb_cover_v2 .heading, .pb_cover_v3 .heading, .pb_cover_v4 .heading {
     font-size: 62px;
@@ -86,7 +83,7 @@
 
 /* Example styles for the section */
 .pb_section {
-    padding: 60px 0;
+    padding: 40px 0;
   }
   
   .pb_bg-half {
@@ -177,8 +174,8 @@
 .author-image {
   display: block;
   margin: 0 auto 20px; /* Center the image and add margin below */
-  width: 170px; /* Adjust the size as needed */
-  height: 170px; /* Adjust the size as needed */
+  width: 180px; /* Adjust the size as needed */
+  height: 180px; /* Adjust the size as needed */
   border-radius: 50%; /* Make the image circular */
   object-fit: cover; /* Ensure the image covers the entire area */
 }
