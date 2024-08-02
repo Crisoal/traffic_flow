@@ -16,3 +16,4 @@ scikit-learn
 geopy
 requests
 xmltodict
+psycopg2-binary
