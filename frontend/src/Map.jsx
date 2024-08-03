@@ -33,6 +33,12 @@ const Map = () => {
     const [lon, lat] = location;
 
     try {
+      // Remove previous data visuals
+      if (map.getSource('traffic-data')) {
+        map.removeLayer('traffic-heatmap');
+        map.removeSource('traffic-data');
+      }
+
       // Simulated current traffic data
       const simulatedCurrentTrafficData = {
         congestion_level: 2,
@@ -184,7 +190,7 @@ const Map = () => {
       'heatmap-color': colorSchemes[forecastTime] || colorSchemes.current,
       'heatmap-weight': 1,
       'heatmap-intensity': 1,
-      'heatmap-radius': 30,
+      'heatmap-radius': 50, // Increased radius for better coverage
       'heatmap-opacity': 0.7
     };
   };
@@ -214,6 +220,7 @@ const Map = () => {
       const heatmapPaintProperties = getHeatmapPaintProperties(forecastTime);
       console.log('Updating heatmap with properties:', heatmapPaintProperties);
       map.setPaintProperty(layerId, 'heatmap-color', heatmapPaintProperties['heatmap-color']);
+      map.setPaintProperty(layerId, 'heatmap-radius', heatmapPaintProperties['heatmap-radius']);
     }
 
     // Remove previous marker if present
@@ -346,10 +353,12 @@ const Map = () => {
 
   const handleSelect = async (address) => {
     console.log('Selected address:', address);
+    setStartLocation(address); // Update the search box with the selected address
+
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`);
     const data = await response.json();
     if (data.length > 0) {
-      const { lat, lon } = data[0];
+      const { lat, lon, display_name } = data[0];
       const coordinates = [parseFloat(lon), parseFloat(lat)];
       console.log('Coordinates of selected address:', coordinates);
 
@@ -365,7 +374,7 @@ const Map = () => {
 
       markerRef.current = newMarker;
 
-      setSearchedLocation(coordinates);
+      setSearchedLocation(display_name);
 
       // Fetch current traffic data and prediction data when a location is searched
       fetchTrafficData(mapRef.current, coordinates);
@@ -465,6 +474,14 @@ const Map = () => {
           isOpen={tooltipVisible}
           target={() => markerRef.current?.getElement()}
           toggle={() => setTooltipVisible(!tooltipVisible)}
+          style={{
+            backgroundColor: '#333',
+            color: '#fff',
+            fontSize: '14px',
+            padding: '8px',
+            borderRadius: '4px',
+            maxWidth: '200px'
+          }}
         >
           {tooltipContent}
         </Tooltip>
@@ -474,4 +491,3 @@ const Map = () => {
 };
 
 export default Map;
-
