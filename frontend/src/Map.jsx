@@ -21,6 +21,7 @@ const Map = () => {
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const heatmapLayerRef = useRef(null);
+  const selectedForecastTimeRef = useRef('current'); // Store selected forecast time
 
   const toggleDirections = useCallback(() => {
     setDirectionsVisible(prevState => !prevState);
@@ -48,37 +49,37 @@ const Map = () => {
         '15 mins': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Moderate congestion',
+          predicted_congestion_level: 2,
           prediction_time: new Date(Date.now() + 15 * 60000).toISOString(),
         },
         '30 mins': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'High congestion',
+          predicted_congestion_level: 3,
           prediction_time: new Date(Date.now() + 30 * 60000).toISOString(),
         },
         '45 mins': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Severe congestion',
+          predicted_congestion_level: 4,
           prediction_time: new Date(Date.now() + 45 * 60000).toISOString(),
         },
         '1 hr': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Moderate congestion',
+          predicted_congestion_level: 2,
           prediction_time: new Date(Date.now() + 60 * 60000).toISOString(),
         },
         '2 hr': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'High congestion',
+          predicted_congestion_level: 3,
           prediction_time: new Date(Date.now() + 120 * 60000).toISOString(),
         },
         '3 hr': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Severe congestion',
+          predicted_congestion_level: 4,
           prediction_time: new Date(Date.now() + 180 * 60000).toISOString(),
         },
       };
@@ -119,20 +120,64 @@ const Map = () => {
         ['heatmap-density'],
         '#ffffff', // No congestion
         0.1, '#00ff00', // Low congestion
-        0.3, '#ffff00', // Moderate congestion
+        0.3, '#ffff00', // Medium congestion
         0.6, '#ff8000', // High congestion
-        1, '#ff0000' // Extreme congestion
+        1, '#ff0000' // Severe congestion
       ],
       '15 mins': [
         'step',
         ['heatmap-density'],
         '#ffffff', // No congestion
         0.1, '#00ff00', // Low congestion
-        0.3, '#ffff00', // Moderate congestion
+        0.3, '#ffff00', // Medium congestion
         0.6, '#ff8000', // High congestion
-        1, '#ff0000' // Extreme congestion
+        1, '#ff0000' // Severe congestion
       ],
-      // Add other forecast times if needed
+      '30 mins': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Medium congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Severe congestion
+      ],
+      '45 mins': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Medium congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Severe congestion
+      ],
+      '1 hr': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Medium congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Severe congestion
+      ],
+      '2 hr': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Medium congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Severe congestion
+      ],
+      '3 hr': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Medium congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Severe congestion
+      ],
     };
 
     return {
@@ -145,9 +190,15 @@ const Map = () => {
   };
 
   const visualizeTrafficData = (map, data, forecastTime) => {
-    if (heatmapLayerRef.current) {
+    const sourceId = 'traffic-data';
+    const layerId = 'traffic-heatmap';
+
+    console.log('Visualizing traffic data for forecastTime:', forecastTime);
+    console.log('Data:', data);
+
+    if (map.getSource(sourceId)) {
       // Update the heatmap source with data for the searched location
-      map.getSource('traffic-data').setData({
+      map.getSource(sourceId).setData({
         type: 'FeatureCollection',
         features: [{
           type: 'Feature',
@@ -160,48 +211,75 @@ const Map = () => {
       });
 
       // Update heatmap layer properties to reflect new forecast time
-      map.setPaintProperty('traffic-heatmap', 'heatmap-color', getHeatmapPaintProperties(forecastTime)['heatmap-color']);
+      const heatmapPaintProperties = getHeatmapPaintProperties(forecastTime);
+      console.log('Updating heatmap with properties:', heatmapPaintProperties);
+      map.setPaintProperty(layerId, 'heatmap-color', heatmapPaintProperties['heatmap-color']);
     }
 
     // Remove previous marker if present
     if (markerRef.current) {
       markerRef.current.remove();
+      markerRef.current = null;
     }
 
-    // Add a new marker
     const marker = new mapboxgl.Marker()
       .setLngLat([data.longitude, data.latitude])
       .addTo(map);
 
     markerRef.current = marker;
 
-    // Show the marker when the user hovers over the heatmap
-    map.on('mouseenter', 'traffic-heatmap', () => {
-      if (markerRef.current) {
-        markerRef.current.getElement().style.display = 'block';
-      }
-    });
-
-    // Hide the marker when the user moves the mouse away from the heatmap
-    map.on('mouseleave', 'traffic-heatmap', () => {
-      if (markerRef.current) {
-        markerRef.current.getElement().style.display = 'none';
-      }
-    });
-
     marker.getElement().addEventListener('click', () => {
-      setTooltipContent(generateTooltipContent(data, forecastTime));
+      const tooltipContent = generateTooltipContent(data, selectedForecastTimeRef.current); // Use stored forecast time
+      console.log('Tooltip content generated:', tooltipContent);
+      setTooltipContent(tooltipContent);
       setTooltipVisible(true);
     });
+
+    const handleMouseEnter = (e) => {
+      const coordinates = e.features[0].geometry.coordinates.slice();
+      const properties = e.features[0].properties;
+
+      const marker = new mapboxgl.Marker()
+        .setLngLat(coordinates)
+        .addTo(map);
+
+      markerRef.current = marker;
+
+      const tooltipContent = generateTooltipContent(properties, selectedForecastTimeRef.current);
+      console.log('Tooltip content generated:', tooltipContent);
+      setTooltipContent(tooltipContent);
+      setTooltipVisible(true);
+
+      marker.getElement().addEventListener('click', () => {
+        setTooltipContent(tooltipContent);
+        setTooltipVisible(true);
+      });
+    };
+
+    const handleMouseLeave = () => {
+      if (markerRef.current) {
+        markerRef.current.remove();
+        markerRef.current = null;
+      }
+      setTooltipVisible(false);
+    };
+
+    map.on('mouseenter', layerId, handleMouseEnter);
+    map.on('mouseleave', layerId, handleMouseLeave);
+
+    return () => {
+      map.off('mouseenter', layerId, handleMouseEnter);
+      map.off('mouseleave', layerId, handleMouseLeave);
+    };
   };
 
   const generateTooltipContent = (data, forecastTime = 'current') => {
     if (!data) return '';
-    if (forecastTime === 'current') {
-      return `Congestion Level: ${data.congestion_level}\nCurrent Speed: ${data.current_speed}\nFree Flow Speed: ${data.free_flow_speed}\nIntensity: ${getCongestionIntensity(data.congestion_level)}`;
-    } else {
-      return `Forecast for ${forecastTime}:\nPredicted Congestion Level: ${data.predicted_congestion_level}\nPrediction Time: ${data.prediction_time}`;
-    }
+    const content = forecastTime === 'current'
+      ? `Congestion Level: ${getCongestionIntensity(data.congestion_level)}\nCurrent Speed: ${data.current_speed}\nFree Flow Speed: ${data.free_flow_speed}\nIntensity: ${getCongestionIntensity(data.congestion_level)}`
+      : `Forecast for ${forecastTime}:\nPredicted Congestion Level: ${getCongestionIntensity(data.predicted_congestion_level)}\nPrediction Time: ${data.prediction_time}`;
+    console.log('Generated tooltip content:', content);
+    return content;
   };
 
   useEffect(() => {
@@ -267,23 +345,25 @@ const Map = () => {
   }, [tooltipContent]);
 
   const handleSelect = async (address) => {
+    console.log('Selected address:', address);
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`);
     const data = await response.json();
     if (data.length > 0) {
       const { lat, lon } = data[0];
       const coordinates = [parseFloat(lon), parseFloat(lat)];
+      console.log('Coordinates of selected address:', coordinates);
 
       if (markerRef.current) {
         markerRef.current.remove();
       }
+
+      mapRef.current.flyTo({ center: coordinates, zoom: 15 });
 
       const newMarker = new mapboxgl.Marker()
         .setLngLat(coordinates)
         .addTo(mapRef.current);
 
       markerRef.current = newMarker;
-
-      mapRef.current.flyTo({ center: coordinates, zoom: 15 });
 
       setSearchedLocation(coordinates);
 
@@ -293,16 +373,15 @@ const Map = () => {
   };
 
   const getCongestionIntensity = (level) => {
-    switch (level) {
-      case 1:
-        return 'Light';
-      case 2:
-        return 'Moderate';
-      case 3:
-        return 'Heavy';
-      default:
-        return 'Unknown';
-    }
+    const intensity = {
+      0: 'No congestion',
+      1: 'Low congestion',
+      2: 'Medium congestion',
+      3: 'High congestion',
+      4: 'Severe congestion'
+    }[level] || 'Unknown';
+    console.log('Congestion intensity for level', level, ':', intensity);
+    return intensity;
   };
 
   return (
@@ -356,16 +435,21 @@ const Map = () => {
             key={time}
             color={forecastTime === time ? 'primary' : 'secondary'}
             onClick={() => {
+              console.log('Forecast time button clicked:', time);
               setForecastTime(time);
+              selectedForecastTimeRef.current = time; // Store selected forecast time
               if (searchedLocation) {
                 const data = time === 'current' ? currentTrafficData : predictionData[time];
+                console.log('Traffic data for', time, ':', data);
                 if (data && data.latitude) {
                   visualizeTrafficData(mapRef.current, data, time);
                   // Update heatmap colors based on selected forecast time
                   mapRef.current.setPaintProperty('traffic-heatmap', 'heatmap-color', getHeatmapPaintProperties(time)['heatmap-color']);
-                  setTooltipContent(generateTooltipContent(data, time));
+                  const content = generateTooltipContent(data, time);
+                  setTooltipContent(content);
                   setTooltipVisible(false);
                   setTooltipVisible(true);
+                  console.log('Updated tooltip content:', content);
                 }
               }
             }}
@@ -375,7 +459,7 @@ const Map = () => {
         ))}
       </div>
       <div id="map" ref={mapContainerRef} style={{ width: '100%', height: '100vh' }}></div>
-      {tooltipVisible && (
+      {markerRef.current && tooltipVisible && (
         <Tooltip
           placement="top"
           isOpen={tooltipVisible}
@@ -390,3 +474,4 @@ const Map = () => {
 };
 
 export default Map;
+

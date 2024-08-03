@@ -345,7 +345,6 @@ def predict_congestion(lat, lon):
         prediction = model.predict(data)
         congestion_levels = ['No congestion', 'Low congestion', 'Medium congestion', 'High congestion', 'Severe congestion']
         
-        # Assuming the model outputs a probability distribution across the congestion levels for each horizon
         # Adjust the indexing according to your model's output shape
         predicted_congestion = congestion_levels[np.argmax(prediction)]
         
