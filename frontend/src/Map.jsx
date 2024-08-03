@@ -1,5 +1,3 @@
-// Map.js
-
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -28,8 +26,8 @@ const Map = () => {
     setDirectionsVisible(prevState => !prevState);
   }, []);
 
-  const fetchTrafficData = async (map, location) => {
-    if (!location) return;
+  const fetchTrafficData = async (map, location = []) => {
+    if (location.length === 0) return;
 
     const [lon, lat] = location;
 
@@ -105,9 +103,10 @@ const Map = () => {
             'heatmap-color': [
               'interpolate',
               ['linear'],
-              ['heatmap-density', 0, '#BDBDC3'], // Light gray for low density
-              ['heatmap-density', 0.5, '#FFD700'], // Gold for medium density
-              ['heatmap-density', 1, '#FF4500'] // Tomato for high density
+              ['heatmap-density'],
+              0, '#00f0ff', // Cool blue for low density
+              0.5, '#ffbf00', // Yellow for medium density
+              1, '#ff0000'  // Warm red for high density
             ],
             'heatmap-weight': 1,
             'heatmap-intensity': 1,
@@ -150,17 +149,13 @@ const Map = () => {
 
     markerRef.current = marker;
 
-    marker.getElement().addEventListener('mouseenter', () => {
+    marker.getElement().addEventListener('click', () => {
       setTooltipContent(generateTooltipContent(data));
       setTooltipVisible(true);
     });
-
-    marker.getElement().addEventListener('mouseleave', () => {
-      setTooltipVisible(false);
-    });
   };
 
-  const generateTooltipContent = (data) => {
+  const generateTooltipContent = (data, forecastTime = 'current') => {
     if (!data) return '';
     if (forecastTime === 'current') {
       return `Congestion Level: ${data.congestion_level}\nCurrent Speed: ${data.current_speed}\nFree Flow Speed: ${data.free_flow_speed}\nIntensity: ${getCongestionIntensity(data.congestion_level)}`;
@@ -223,6 +218,14 @@ const Map = () => {
     }
   }, [directionsVisible]);
 
+  useEffect(() => {
+    if (mapRef.current) {
+      // Force a re-render of the tooltip
+      setTooltipVisible(false);
+      setTooltipVisible(true);
+    }
+  }, [tooltipContent]);
+
   const handleSelect = async (address) => {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${address}`);
     const data = await response.json();
@@ -250,7 +253,7 @@ const Map = () => {
   };
 
   const getCongestionIntensity = (level) => {
-    switch(level) {
+    switch (level) {
       case 1:
         return 'Light';
       case 2:
@@ -283,18 +286,19 @@ const Map = () => {
                   />
                   <div className="autocomplete-dropdown-container">
                     {suggestions.map(suggestion => {
-                      const className = suggestion.active ? 'suggestion-item--active' : 'suggestion-item';
-                      const style = suggestion.active
+                      const { placeId, description, active } = suggestion; // Extract necessary fields
+                      const className = active ? 'suggestion-item--active' : 'suggestion-item';
+                      const style = active
                         ? { backgroundColor: '#f0f0f0', cursor: 'pointer' }
                         : { backgroundColor: '#ffffff', cursor: 'pointer' };
                       return (
                         <div
-                          {...getSuggestionItemProps(suggestion, {
-                            className,
-                            style,
-                          })}
+                          key={placeId} // Use placeId as the key
+                          className={className}
+                          style={style}
+                          {...getSuggestionItemProps(suggestion)}
                         >
-                          <span>{suggestion.description}</span>
+                          <span>{description}</span>
                         </div>
                       );
                     })}
@@ -318,7 +322,10 @@ const Map = () => {
                 const data = time === 'current' ? currentTrafficData : predictionData[time];
                 if (data && data.latitude) {
                   visualizeTrafficData(mapRef.current, data);
-                  setTooltipContent(generateTooltipContent(data));
+                  setTooltipContent(generateTooltipContent(data, time));
+                  // Force re-render of the tooltip to update content immediately
+                  setTooltipVisible(false);
+                  setTooltipVisible(true);
                 }
               }
             }}
