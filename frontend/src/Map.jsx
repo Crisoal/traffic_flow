@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaDirections } from 'react-icons/fa';
 import PlacesAutocomplete from 'react-places-autocomplete';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import './styles/map.css'; // Ensure you have this CSS file for styling
+import './styles/map.css';
 import { Button, Tooltip } from 'reactstrap';
 
 const Map = () => {
@@ -48,7 +48,7 @@ const Map = () => {
         '15 mins': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Medium congestion',
+          predicted_congestion_level: 'Moderate congestion',
           prediction_time: new Date(Date.now() + 15 * 60000).toISOString(),
         },
         '30 mins': {
@@ -66,7 +66,7 @@ const Map = () => {
         '1 hr': {
           latitude: lat,
           longitude: lon,
-          predicted_congestion_level: 'Medium congestion',
+          predicted_congestion_level: 'Moderate congestion',
           prediction_time: new Date(Date.now() + 60 * 60000).toISOString(),
         },
         '2 hr': {
@@ -99,33 +99,54 @@ const Map = () => {
           id: 'traffic-heatmap',
           type: 'heatmap',
           source: 'traffic-data',
-          paint: {
-            'heatmap-color': [
-              'interpolate',
-              ['linear'],
-              ['heatmap-density'],
-              0, '#00f0ff', // Cool blue for low density
-              0.5, '#ffbf00', // Yellow for medium density
-              1, '#ff0000'  // Warm red for high density
-            ],
-            'heatmap-weight': 1,
-            'heatmap-intensity': 1,
-            'heatmap-radius': 30,
-            'heatmap-opacity': 0.7
-          }
+          paint: getHeatmapPaintProperties('current') // Initialize with 'current' colors
         });
 
         heatmapLayerRef.current = 'traffic-heatmap';
       }
 
-      visualizeTrafficData(map, simulatedCurrentTrafficData);
+      visualizeTrafficData(map, simulatedCurrentTrafficData, forecastTime);
     } catch (error) {
       console.error('Error fetching traffic data:', error);
     }
   };
 
-  const visualizeTrafficData = (map, data) => {
+  const getHeatmapPaintProperties = (forecastTime) => {
+    // Define heatmap colors based on the forecast time
+    const colorSchemes = {
+      current: [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Moderate congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Extreme congestion
+      ],
+      '15 mins': [
+        'step',
+        ['heatmap-density'],
+        '#ffffff', // No congestion
+        0.1, '#00ff00', // Low congestion
+        0.3, '#ffff00', // Moderate congestion
+        0.6, '#ff8000', // High congestion
+        1, '#ff0000' // Extreme congestion
+      ],
+      // Add other forecast times if needed
+    };
+
+    return {
+      'heatmap-color': colorSchemes[forecastTime] || colorSchemes.current,
+      'heatmap-weight': 1,
+      'heatmap-intensity': 1,
+      'heatmap-radius': 30,
+      'heatmap-opacity': 0.7
+    };
+  };
+
+  const visualizeTrafficData = (map, data, forecastTime) => {
     if (heatmapLayerRef.current) {
+      // Update the heatmap source with data for the searched location
       map.getSource('traffic-data').setData({
         type: 'FeatureCollection',
         features: [{
@@ -137,20 +158,39 @@ const Map = () => {
           }
         }]
       });
+
+      // Update heatmap layer properties to reflect new forecast time
+      map.setPaintProperty('traffic-heatmap', 'heatmap-color', getHeatmapPaintProperties(forecastTime)['heatmap-color']);
     }
 
+    // Remove previous marker if present
     if (markerRef.current) {
       markerRef.current.remove();
     }
 
+    // Add a new marker
     const marker = new mapboxgl.Marker()
       .setLngLat([data.longitude, data.latitude])
       .addTo(map);
 
     markerRef.current = marker;
 
+    // Show the marker when the user hovers over the heatmap
+    map.on('mouseenter', 'traffic-heatmap', () => {
+      if (markerRef.current) {
+        markerRef.current.getElement().style.display = 'block';
+      }
+    });
+
+    // Hide the marker when the user moves the mouse away from the heatmap
+    map.on('mouseleave', 'traffic-heatmap', () => {
+      if (markerRef.current) {
+        markerRef.current.getElement().style.display = 'none';
+      }
+    });
+
     marker.getElement().addEventListener('click', () => {
-      setTooltipContent(generateTooltipContent(data));
+      setTooltipContent(generateTooltipContent(data, forecastTime));
       setTooltipVisible(true);
     });
   };
@@ -286,14 +326,14 @@ const Map = () => {
                   />
                   <div className="autocomplete-dropdown-container">
                     {suggestions.map(suggestion => {
-                      const { placeId, description, active } = suggestion; // Extract necessary fields
+                      const { placeId, description, active } = suggestion;
                       const className = active ? 'suggestion-item--active' : 'suggestion-item';
                       const style = active
                         ? { backgroundColor: '#f0f0f0', cursor: 'pointer' }
                         : { backgroundColor: '#ffffff', cursor: 'pointer' };
                       return (
                         <div
-                          key={placeId} // Use placeId as the key
+                          key={placeId}
                           className={className}
                           style={style}
                           {...getSuggestionItemProps(suggestion)}
@@ -318,12 +358,12 @@ const Map = () => {
             onClick={() => {
               setForecastTime(time);
               if (searchedLocation) {
-                // Extract data from the previously fetched prediction data
                 const data = time === 'current' ? currentTrafficData : predictionData[time];
                 if (data && data.latitude) {
-                  visualizeTrafficData(mapRef.current, data);
+                  visualizeTrafficData(mapRef.current, data, time);
+                  // Update heatmap colors based on selected forecast time
+                  mapRef.current.setPaintProperty('traffic-heatmap', 'heatmap-color', getHeatmapPaintProperties(time)['heatmap-color']);
                   setTooltipContent(generateTooltipContent(data, time));
-                  // Force re-render of the tooltip to update content immediately
                   setTooltipVisible(false);
                   setTooltipVisible(true);
                 }
