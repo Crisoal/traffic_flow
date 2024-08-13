@@ -1,4 +1,4 @@
-# models/model.py
+# models/train_model.py
 
 import pandas as pd
 import numpy as np
@@ -35,12 +35,6 @@ features = ['timestamp', 'congestion_level', 'temperature', 'precipitation',
             'wind_speed', 'visibility', 'humidity', 'pressure', 'hour', 'day_of_week']
 data = merged_data[features].copy()
 
-# Feature engineering
-data['day_of_month'] = pd.to_datetime(data['timestamp']).dt.day
-data['month'] = pd.to_datetime(data['timestamp']).dt.month
-nigeria_holidays = holidays.Nigeria()
-data['is_holiday'] = pd.to_datetime(data['timestamp']).dt.date.apply(lambda x: 1 if x in nigeria_holidays else 0)
-
 # Convert timestamp to datetime index
 data['timestamp'] = pd.to_datetime(data['timestamp'])
 data.set_index('timestamp', inplace=True)
@@ -52,7 +46,7 @@ for column in data.columns:
     data[column] = scalers[column].fit_transform(data[column].values.reshape(-1, 1))
 
 # Set a single look-back value and forecast horizons
-look_back = 12  # You can change this value to experiment with different look-back periods
+look_back = 12  # change this value to experiment with different look-back periods
 horizons = [1, 2, 3, 4, 8, 12]  # 15 mins, 30 mins, 45 mins, 1 hour, 2 hours, and 3 hours (assuming data is in 15-minute intervals)
 
 # Split into train and test sets (80% train, 20% test)
@@ -106,6 +100,9 @@ tuner.search(X_train, Y_train, epochs=50, validation_data=(X_test, Y_test), call
 
 # Get the optimal hyperparameters
 best_hps = tuner.get_best_hyperparameters(num_trials=1)[0]
+
+# Save the best hyperparameters
+joblib.dump(best_hps.values, 'best_hyperparameters.pkl')
 
 # Build the model with the optimal hyperparameters and train it
 model = tuner.hypermodel.build(best_hps)
@@ -172,9 +169,11 @@ learning_rate = best_hps.values['learning_rate']
 model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
               loss='mean_squared_error')
 
-
-# Save the model using the recommended Keras format
-model.save('traffic_model.keras')
+# Save only the architecture and weights, not the optimizer state
+model.save('traffic_model.keras', include_optimizer=False)
 
 #save the scalers
 joblib.dump(scalers, 'scalers.pkl')
+
+
+
