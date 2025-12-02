@@ -3,7 +3,7 @@
 import requests
 
 def get_current_weather_data():
-    api_key = '0b9cc0c3a26a71db94f472047fbce5c9'  # Replace with your actual OpenWeatherMap API key
+    api_key = ''  # Replace with your actual OpenWeatherMap API key
 
     url = f'https://api.openweathermap.org/data/2.5/weather?q=Lagos,NG&appid={api_key}'
 
