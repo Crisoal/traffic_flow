@@ -8,8 +8,8 @@ from sqlalchemy import create_engine
 import json
 
 # Define PostgreSQL database connection details
-db_username = 'postgres'
-db_password = 'password'
+db_username = ''
+db_password = ''
 db_host = 'localhost'
 db_port = '5432'
 db_name = 'postgres'
