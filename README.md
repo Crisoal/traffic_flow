@@ -76,6 +76,3 @@ python app.py
 
 ## Author
 Christiana Ola
-
-## License
-MIT License
